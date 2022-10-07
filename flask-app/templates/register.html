@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{%block title%}
+Registration page
+{%endblock%}
+
+{%block content%}
+<div class="container pd-20">
+    <h1 style="margin-top:100px;">
+        Welcome to Registration page
+    </h1>
+    <form action="/Success">
+        <div class="form-group" method="POST">
+            <label>User Id</label><input class="form-control col-md-5" id="uid" type="text">
+            <label>Password:</label><input class="form-control col-md-5" id="pwd" type="password"></br>
+            <input class="btn btn-success" type="submit" value="submit">
+            <input class="btn btn-danger" type="reset" value="clear">
+        </div>
+        <div>
+            <a class="btn btn-primary" href="\Login">Login instead?</a>
+        </div>
+    </form>
+</div>
+{%endblock%}
