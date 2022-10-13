@@ -1,0 +1,51 @@
+<html>
+
+<head>
+    <title>REGISTER</title>
+    <style>
+        h1,
+        div,
+        table,
+        th,
+        td {
+            text-align: center;
+        }
+        body{
+            background-color: cyan;
+        }
+    </style>
+</head>
+
+<body>
+    <h1><b>Registration Page</b></h1>
+    <div>
+        <h1>{{ msg }}</h1>
+        <form action="" method="post">
+            <center>
+                <table>
+                    <tr>
+                        <th>Name: </th>
+                        <td><input type="text" name="name" id="name"></td>
+                    </tr>
+                    <tr>
+                        <th>Email: </th>
+                        <td><input type="email" name="email" id="email"><br></td>
+                    </tr>
+                    <tr>
+                        <th>Rollno: </th>
+                        <td><input type="number" name="rollno" id="rollno"></td>
+                    </tr>
+                    <tr>
+                        <th>Password: </th>
+                        <td><input type="password" name="password" id="password"></td>
+                    </tr>
+                    <tr><th colspan="2"><input type="submit" value="submit"></th></tr>
+                    <tr><th><a href="{{url_for('login')}}">Login instead?</a></th></tr>
+                </table>
+            </center>
+        </form>
+    </div>
+
+</body>
+
+</html>
