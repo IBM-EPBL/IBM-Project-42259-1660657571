@@ -1,28 +1,62 @@
+from crypt import methods
 from flask import Flask, render_template, request
+import ibm_db
+
+conn = ibm_db.connect("DATABASE=bludb;HOSTNAME=125f9f61-9715-46f9-9399-c8177b21803b.c1ogj3sd0tgtu0lqde00.databases.appdomain.cloud;PORT=30426;SECURITY=SSL;SSLServerCertificate=DigiCertGlobalRootCA.crt;UID=wvn94274;PWD=2K5Z7ZiQuEV2edmQ", '', '')
 
 
 app = Flask(__name__)
 
 
 @app.route('/')
-def firstfunc():
+def home():
     return render_template('index.html')
 
-@app.route('/Register')
+
+@app.route('/register', methods=['POST', 'GET'])
 def register():
-    return render_template('register.html')
+    if request.method == "POST":
+        name = request.form.get('name')
+        email = request.form.get('email')
+        password = request.form.get('password')
+        stmt = ibm_db.prepare(conn, 'SELECT * FROM user WHERE username=?')
+        ibm_db.bind_param(stmt, 1, name)
+        ibm_db.execute(stmt)
+        rs = ibm_db.fetch_assoc(stmt)
+        print(rs)
+        if rs:
+            msg = 'Account already Exists'
+            return render_template('register.html', msg=msg)
+        else:
+            reg_stmt = ibm_db.prepare(conn, 'INSERT INTO user VALUES(?,?,?,?)')
+            ibm_db.bind_param(reg_stmt, 1, name)
+            ibm_db.bind_param(reg_stmt, 3, email)
+            ibm_db.bind_param(reg_stmt, 4, password)
+            ibm_db.execute(reg_stmt)
+            msg = 'Successfully Registered'
+            return render_template('register.html', msg=msg)
+    else:
+        return render_template('register.html')
 
 
-@app.route('/Success', methods=["POST", "GET"])
-def registered():
-    uid = request.form.get('uid')
-    pwd = request.form.get('passwd')
-    return render_template('success.html', uid=uid, pwd=pwd)
-
-
-@app.route('/Login')
+@app.route('/login',methods=['POST','GET'])
 def login():
-    return render_template('login.html')
+    if request.method == "POST":
+        name = request.form.get('name')
+        password = request.form.get('password')
+        log_stmt = ibm_db.prepare(
+            conn, 'SELECT * FROM user WHERE username=? and password=?')
+        ibm_db.bind_param(log_stmt, 1, name)
+        ibm_db.bind_param(log_stmt, 2, password)
+        ibm_db.execute(log_stmt)
+        rs = ibm_db.fetch_assoc(log_stmt)
+        if rs:
+            return render_template('dashboard.html')
+        else:
+            msg = 'UID/Password is incorrect'
+            return render_template('login.html', msg=msg)
+    else:
+        return render_template('login.html')
 
 
 if __name__ == '__main__':
