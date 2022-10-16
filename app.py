@@ -1,3 +1,5 @@
+#! /bin/python3
+
 from crypt import methods
 from flask import Flask, render_template, request
 import ibm_db
