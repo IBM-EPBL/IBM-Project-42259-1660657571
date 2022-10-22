@@ -1,3 +1,4 @@
-DigiCertGlobalRootCA.crt
+push-script
 Dockerfile
+DigiCertGlobalRootCA.crt
 .idea
