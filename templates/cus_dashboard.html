@@ -1,0 +1,30 @@
+{%extends 'base.html'%}
+{%block title%}
+Dashboard
+{%endblock%}
+{%block content%}
+<center>
+    <h1>Welcome to Dashboard</h1>
+    <div>You have successfully logged in as {{ role }}</div>
+</center>
+{% if role =='user' %}
+<center>
+    <h1>Hello {{ j['USERNAME'] }}</h1>
+    <div>You have {{ j['NO_OF_QUERIES'] }} Queries</div>
+    <div>
+        <div id="add_elem">
+            <button id="form" class="btn btn-success" onclick="form_create()">Create Query</button>
+        </div>
+    </div>
+</center>
+
+{% elif role=='agent' %}
+<center>
+    <h1>Hello Agent</h1>
+</center>
+{% else %}
+<center>
+    <h1>Hello Admin</h1>
+</center>
+{% endif %}
+{%endblock%}
