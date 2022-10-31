@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block title %}
+Result
+{% endblock %}
+
+{% block content %}
+<h1>{{ msg }}</h1>
+<a class="btn btn-primary" href="{{ url_for('home') }}">Home</a>
+{% endblock %}

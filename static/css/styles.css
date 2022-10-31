@@ -1,11 +1,4 @@
-.heading{
-text-align:center;
-transition:background-color;
-}
-
-h1:hover{
-border-color:black;
-
-color:blue;}
-div{
+.heading {
+    text-align: center;
+    display: inline-block;
 }
