@@ -5,39 +5,51 @@ Dashboard
 {%block content%}
 <center>
     <h1>Welcome to Dashboard</h1>
-    <div>You have successfully logged in as {{ role }}</div>
+    <div>You have successfully logged in as {{ session['role'] }}</div>
 </center>
-{% if role =='user' %}
+{% if session['role'] =='user' %}
 <center>
-    <h1 class="heading">Hello {{ name }}</h1>
+    <h1 class="heading">Hello {{ session['name'] }}</h1>
     <div>
         <h1>Your Previous Query :</h1>
-        <div>{{ query }} </div>
+        <div>{{ session['query'] }} </div>
         <h1>Your Ticket to the Query:</h1>
-        <div>{{ ticket }}</div>
+        <div>{{ session['ticket'] }}</div>
         <h1>Review Status of the Query:</h1>
-        <div>{{ review }}</div>
+        <div>{{ session['review'] }}</div>
 
     </div>
 
     <div>
         <div id="add_elem">
             <button id="form" class="btn btn-success" onclick="form_create()">Create Query</button>
-            <a class="btn btn-primary" href="{{ url_for('home') }}" >Back to Home</a>
+            <a class="btn btn-primary" href="{{ url_for('redir') }}">Back to Home</a>
         </div>
     </div>
 </center>
 
-{% elif role=='agent' %}
+{% elif session['role'] == 'agent' %}
+<hr>
 <center>
-    <h1>Welcome to Dashboard</h1>
-    <div>You have successfully logged in as {{ role }}</div>
-    
+    <h1>Assigned Customers</h1>
+
+
 </center>
-{% elif role=='admin' %}
+{% elif session['role']=='admin' %}
 <center>
-    <h1>Welcome to Dashboard</h1>
-    <div>You have successfully logged in as {{ role }}</div>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Ticket No</th>
+            <th>Assign to</th>
+        </tr>
+        <tr>
+
+            <td>
+
+            </td>
+        </tr>
+    </table>
 </center>
 {% else %}
 <h1>UnIdentified User</h1>

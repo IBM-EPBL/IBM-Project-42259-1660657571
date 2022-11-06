@@ -82,6 +82,11 @@ def login():
         ibm_db.execute(log_stmt)
         rs = ibm_db.fetch_assoc(log_stmt)
         if rs:
+            session['role'] = 'agent'
+            session['name'] = rs['USERNAME']
+            session['customers'] = rs['ASSIGNED_CUSTOMERS']
+            # session['review'] = rs['REVIEW_STATUS']
+            # session['query'] = rs['QUERY']
             return render_template('dashboard.html')
         log_stmt = ibm_db.prepare(
             conn, 'SELECT * FROM admin WHERE username=? and password=?')
@@ -90,7 +95,19 @@ def login():
         ibm_db.execute(log_stmt)
         rs = ibm_db.fetch_assoc(log_stmt)
         if rs:
-            return render_template('dashboard.html')
+            cms = ibm_db.exec_immediate(conn, 'SELECT * FROM user')
+            agt = ibm_db.exec_immediate(conn, 'SELECT * FROM agent')
+            customers = ibm_db.fetch_row(cms)
+            agents = ibm_db.fetch_row(agt)
+            # print(customers, agents)
+            while ibm_db.fetch_row(cms) != False:
+                print ("The Employee number is : ",  ibm_db.result(cms, "TICKET"))
+                print ("The last name is : ", ibm_db.result(cms, "USERNAME"))
+            session['role'] = 'admin'
+            session['customers'] = customers
+            session['agents'] = agents
+
+            return render_template('dashboard.html', customers=customers, agents=agents)
         else:
             msg = 'UID/Password is incorrect'
             return render_template('login.html', msg=msg)
@@ -121,6 +138,11 @@ def success():
         else:
             msg = 'Error Submitting your Query'
             return render_template('success.html', msg=msg)
+
+
+@app.route('/redirect')
+def redir():
+    return redirect(url_for('home'))
 
 
 if __name__ == '__main__':
