@@ -95,19 +95,27 @@ def login():
         ibm_db.execute(log_stmt)
         rs = ibm_db.fetch_assoc(log_stmt)
         if rs:
+            global agent
+            customer = list()
+            agent = list()
+            i = 0
             cms = ibm_db.exec_immediate(conn, 'SELECT * FROM user')
             agt = ibm_db.exec_immediate(conn, 'SELECT * FROM agent')
-            customers = ibm_db.fetch_row(cms)
-            agents = ibm_db.fetch_row(agt)
-            # print(customers, agents)
-            while ibm_db.fetch_row(cms) != False:
-                print ("The Employee number is : ",  ibm_db.result(cms, "TICKET"))
-                print ("The last name is : ", ibm_db.result(cms, "USERNAME"))
+            customers = ibm_db.fetch_assoc(cms)
+            agents = ibm_db.fetch_assoc(agt)
+            while customers:
+                customer.append(customers)
+                customers = ibm_db.fetch_assoc(cms)
+            while agents:
+                agent.append(agents)
+                agents = ibm_db.fetch_assoc(agt)
+            print(customer)
+            print(agent)
             session['role'] = 'admin'
-            session['customers'] = customers
-            session['agents'] = agents
+            session['customer'] = customer
+            session['agent'] = agent
 
-            return render_template('dashboard.html', customers=customers, agents=agents)
+            return render_template('dashboard.html', agent=agent, customer=customer)
         else:
             msg = 'UID/Password is incorrect'
             return render_template('login.html', msg=msg)
@@ -143,6 +151,24 @@ def success():
 @app.route('/redirect')
 def redir():
     return redirect(url_for('home'))
+
+
+@app.route('/querying', methods=['POST'])
+def admin_query():
+    msg = ""
+    agent = request.form.getlist('agent_name')
+    usr_name = request.form.getlist('cus_name')
+    for i in range(0,len(agent)):
+        if agent[i] != 'none':
+            qr = ibm_db.prepare(
+                conn, "UPDATE USER SET ASSIGNED_AGENT=? WHERE USERNAME=?")
+            ibm_db.bind_param(qr, 1, agent)
+            ibm_db.bind_param(qr, 2, usr_name)
+            result = ibm_db.execute(qr)
+            print(agent[i], "   ", usr_name[i])
+            if result:
+                msg = 'queries executed'    
+    return render_template('done.html', msg=msg)
 
 
 if __name__ == '__main__':
