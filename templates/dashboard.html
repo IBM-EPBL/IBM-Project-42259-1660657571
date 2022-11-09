@@ -31,7 +31,46 @@ Dashboard
 {% elif session['role'] == 'agent' %}
 <hr>
 <center>
-    <h1>Assigned Customers</h1>
+    <form action="{{ url_for('agent_submit_reply') }}" method="POST">
+        <table class="table table-hover">
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Ticket No</th>
+                <th scope="col">Query</th>
+                <th scope="col">Reply</th>
+            </tr>
+
+            {% for cus in session['customer'] %}
+            {% if cus['ASSIGNED_AGENT'] == session['name'] %}
+
+            <tr>
+
+                <td>
+                    <select name="name">
+                        <option value="{{ cus['USERNAME'] }}">{{ cus['USERNAME'] }}</option>
+                    </select>
+                </td>
+                <td>
+                    {{ cus['TICKET'] }}
+                </td>
+                <td>
+                    {{ cus['QUERY'] }}
+                </td>
+                <td><textarea name="text" cols="50" rows="4"></textarea></td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+            <tr>
+                <td colspan="4">
+                    <center><input type="submit" value="submit"></center>
+                </td>
+
+            </tr>
+
+        </table>
+    </form>
+
+
 
 
 </center>
@@ -54,7 +93,7 @@ Dashboard
             <tr>
 
                 <td>
-                    <select name="cus_name" >
+                    <select name="cus_name">
                         <option value="{{ cus['USERNAME'] }}">{{ cus['USERNAME'] }}</option>
                     </select>
                 </td>
@@ -99,6 +138,7 @@ Dashboard
     <table>
         <tr>
             <th>Name</th>
+            <th>Assigned Customers</th>
         </tr>
 
         {% for agt in agent %}
