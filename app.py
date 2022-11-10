@@ -3,18 +3,17 @@
 import random
 import string
 from flask import Flask, render_template, request, redirect, url_for, session
+
 import ibm_db
 
 
 def Upper_Lower_string(length):
     result = ''.join((random.choice(string.ascii_uppercase)
-                     for x in range(length)))  # run the loop until the define length
+                     for x in range(length)))
     return result
 
 
 conn = ibm_db.connect("DATABASE=bludb;HOSTNAME=125f9f61-9715-46f9-9399-c8177b21803b.c1ogj3sd0tgtu0lqde00.databases.appdomain.cloud;PORT=30426;SECURITY=SSL;SSLServerCertificate=DigiCertGlobalRootCA.crt;UID=wvn94274;PWD=2K5Z7ZiQuEV2edmQ", '', '')
-
-
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'helloworld'
 
@@ -40,10 +39,11 @@ def register():
             msg = 'Account already Exists'
             return render_template('register.html', msg=msg)
         else:
-            reg_stmt = ibm_db.prepare(conn, 'INSERT INTO user VALUES(?,?,?,?)')
+            reg_stmt = ibm_db.prepare(
+                conn, 'INSERT INTO user ("USERNAME","EMAIL","PASSWORD") VALUES(?,?,?)')
             ibm_db.bind_param(reg_stmt, 1, name)
-            ibm_db.bind_param(reg_stmt, 3, email)
-            ibm_db.bind_param(reg_stmt, 4, password)
+            ibm_db.bind_param(reg_stmt, 2, email)
+            ibm_db.bind_param(reg_stmt, 3, password)
             ibm_db.execute(reg_stmt)
             msg = 'Successfully Registered'
             return render_template('register.html', msg=msg)
@@ -66,17 +66,9 @@ def login():
         rs = ibm_db.fetch_assoc(log_stmt)
         if rs:
             session['role'] = 'user'
-            session['name'] = rs['USERNAME']
-            session['ticket'] = rs['TICKET']
-            session['review'] = rs['REVIEW_STATUS']
-            session['query'] = rs['QUERY']
+            session['customer'] = rs
             print(rs)
-            return render_template('dashboard.html',
-                                   role=session['role'],
-                                   name=session['name'],
-                                   ticket=session['ticket'],
-                                   review=session['review'],
-                                   query=session['query'])
+            return render_template('dashboard.html')
         log_stmt = ibm_db.prepare(
             conn, 'SELECT * FROM agent WHERE username=? and password=?')
         ibm_db.bind_param(log_stmt, 1, name)

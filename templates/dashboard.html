@@ -4,22 +4,34 @@ Dashboard
 {%endblock%}
 {%block content%}
 <center>
-    <h1>Welcome to Dashboard</h1>
-    <div>You have successfully logged in as {{ session['role'] }}</div>
+    <div class="container container-pd-5">
+        <h1>Welcome to Dashboard</h1>
+        <div>You have successfully logged in as {{ session['role'] }}</div>
+        <hr>
+    </div>
 </center>
 {% if session['role'] =='user' %}
 <center>
-    <h1 class="heading">Hello {{ session['name'] }}</h1>
+    {% set customer = session['customer'] %}
+    <h1 class="heading">Hello {{ customer['USERNAME'] }}</h1>
+    {% if customer['QUERY'] =='none' %}
+    <h1>You Haven't made any Queries</h1>
+    {% else %}
     <div>
         <h1>Your Previous Query :</h1>
-        <div>{{ session['query'] }} </div>
-        <h1>Your Ticket to the Query:</h1>
-        <div>{{ session['ticket'] }}</div>
-        <h1>Review Status of the Query:</h1>
-        <div>{{ session['review'] }}</div>
-
+        <div>{{ customer['QUERY'] }} </div>
+        <h1>Your Ticket:</h1>
+        <div>{{ customer['TICKET'] }}</div>
+        {% if customer['REVIEW_STATUS'] == 1 %}
+        <h1>Reply from the Agent:</h1>
+        <div>{{ customer['REPLY'] }}</div>
+        {% else %}
+        <h1>Review Status:</h1>
+        <div>Not Yet Reviewed</div>
+        {% endif %}
     </div>
-
+    <hr>
+    {% endif %}
     <div>
         <div id="add_elem">
             <button id="form" class="btn btn-success" onclick="form_create()">Create Query</button>
@@ -41,7 +53,7 @@ Dashboard
             </tr>
 
             {% for cus in session['customer'] %}
-            {% if cus['ASSIGNED_AGENT'] == session['name'] %}
+            {% if cus['ASSIGNED_AGENT'] == session['name'] and cus['QUERY']!='None'%}
 
             <tr>
 
@@ -89,6 +101,7 @@ Dashboard
             </tr>
 
             {% for cus in session['customer'] %}
+            {% if cus['QUERY'] != 'none' and cus['REVIEW_STATUS']! =1 %}
 
             <tr>
 
@@ -121,6 +134,7 @@ Dashboard
                     </select>
                 </td>
             </tr>
+            {% endif %}
             {% endfor %}
             <tr>
                 <td colspan="4">
