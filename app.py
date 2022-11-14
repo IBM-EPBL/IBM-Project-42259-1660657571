@@ -1,5 +1,4 @@
-#! /bin/python3
-
+#!venv/bin/python3
 import random
 import string
 from flask import Flask, render_template, request, redirect, url_for, session
