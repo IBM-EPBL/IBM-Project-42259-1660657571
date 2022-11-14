@@ -1,0 +1,174 @@
+{%extends 'base.html'%}
+{%block title%}
+Dashboard
+{%endblock%}
+{%block content%}
+<center>
+    <div class="container container-pd-5">
+        <h1>Welcome to Dashboard</h1>
+        <div>You have successfully logged in as {{ session['role'] }}</div>
+        <hr>
+    </div>
+</center>
+{% if session['role'] =='user' %}
+<center>
+    {% set customer = session['customer'] %}
+    <h1 class="heading">Hello {{ customer['USERNAME'] }}</h1>
+    {% if customer['QUERY'] =='none' %}
+    <h1>You Haven't made any Queries</h1>
+    {% else %}
+    <div>
+        <h1>Your Previous Query :</h1>
+        <div>{{ customer['QUERY'] }} </div>
+        <h1>Your Ticket:</h1>
+        <div>{{ customer['TICKET'] }}</div>
+        {% if customer['REVIEW_STATUS'] == 1 %}
+        <h1>Reply from the Agent:</h1>
+        <div>{{ customer['REPLY'] }}</div>
+        {% else %}
+        <h1>Review Status:</h1>
+        <div>Not Yet Reviewed</div>
+        {% endif %}
+    </div>
+    <hr>
+    {% endif %}
+    <div>
+        <div id="add_elem">
+            <button id="form" class="btn btn-success" onclick="form_create()">Create Query</button>
+            <a class="btn btn-primary" href="{{ url_for('redir') }}">Back to Home</a>
+        </div>
+    </div>
+</center>
+
+{% elif session['role'] == 'agent' %}
+<hr>
+<center>
+    <form action="{{ url_for('agent_submit_reply') }}" method="POST">
+        <table class="table table-hover">
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Ticket No</th>
+                <th scope="col">Query</th>
+                <th scope="col">Reply</th>
+            </tr>
+
+            {% for cus in session['customer'] %}
+            {% if cus['ASSIGNED_AGENT'] == session['name'] and cus['QUERY']!='None'%}
+
+            <tr>
+
+                <td>
+                    <select name="name">
+                        <option value="{{ cus['USERNAME'] }}">{{ cus['USERNAME'] }}</option>
+                    </select>
+                </td>
+                <td>
+                    {{ cus['TICKET'] }}
+                </td>
+                <td>
+                    {{ cus['QUERY'] }}
+                </td>
+                <td><textarea name="text" cols="50" rows="4"></textarea></td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+            <tr>
+                <td colspan="4">
+                    <center><input type="submit" value="submit"></center>
+                </td>
+
+            </tr>
+
+        </table>
+    </form>
+
+
+
+
+</center>
+{% elif session['role']=='admin' %}
+<center>
+    <div class="container">
+        <form action="{{ url_for('admin_query') }}" method="POST">
+            <h1>All Customers</h1>
+            <table class="table table-hover">
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Ticket No</th>
+                    <th scope="col">Query</th>
+                    <th scope="col">Query Status</th>
+                    <th scope="col">Assigned to</th>
+                    <th scope="col">Assign To</th>
+                </tr>
+
+                {% for cus in session['customer'] %}
+                {% if cus['QUERY'] != 'none' and cus['REVIEW_STATUS'] !=1 %}
+
+                <tr>
+
+                    <td>
+                        <select name="cus_name">
+                            <option value="{{ cus['USERNAME'] }}">{{ cus['USERNAME'] }}</option>
+                        </select>
+                    </td>
+                    <td>
+                        {{ cus['TICKET'] }}
+                    </td>
+                    <td>
+                        {{ cus['QUERY'] }}
+                    </td>
+                    <td>
+                        {% if cus['REVIEW_STATUS'] == 1 %}
+                        Reviewed
+                        {% else %}
+                        Not yet Reviewed
+                        {% endif %}
+                    </td>
+                    <td>{{ cus['ASSIGNED_AGENT'] }}</td>
+                    <td>
+                        <select name="agent_name">
+                            <option value="none">Select agent</option>
+                            {% for agt in session['agent'] %}
+                            <option value="{{ agt['USERNAME'] }}">{{ agt['USERNAME'] }}</option>
+                            {% endfor %}
+
+                        </select>
+                    </td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+                <tr>
+                    <td colspan="4">
+                        <center><input type="submit" value="submit"></center>
+                    </td>
+
+                </tr>
+
+            </table>
+        </form>
+    </div>
+
+
+    <h1>Agent</h1>
+
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Assigned Customers</th>
+        </tr>
+
+        {% for agt in agent %}
+        <tr>
+            <td>
+                {{ agt['USERNAME'] }}
+            </td>
+        </tr>
+        {% endfor %}
+
+
+    </table>
+</center>
+{% else %}
+<h1>UnIdentified User</h1>
+{% endif %}
+{%endblock%}

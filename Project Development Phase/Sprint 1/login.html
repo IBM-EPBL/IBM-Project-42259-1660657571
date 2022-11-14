@@ -1,0 +1,24 @@
+{%extends 'base.html'%}
+{%block title%}
+Login Page
+{%endblock%}
+{%block content%}
+<div class="container pd-20">
+    <h1 style="margin-top:100px;">
+        Welcome to Login page
+    </h1>
+    <h2>{{ msg }}</h2>
+    <form action="{{url_for('login')}}" method="POST">
+        <div class="form-group">
+        <label class="col-md-5">User Name</label><input class="form-control col-md-10" name="name" type="text">
+        <label class="col-md-5">Password:</label><input class="form-control col-md-10" name="password" type="password">
+            <input class="btn btn-success" type="submit" value="submit">
+            <input class="btn btn-danger" type="reset" value="clear">
+        </div>
+        <div>
+            <a href="{{url_for('home')}}" class="btn btn-primary">< Back to Home</a>
+
+        </div>
+    </form>
+</div>
+{%endblock%}

@@ -88,63 +88,65 @@ Dashboard
 </center>
 {% elif session['role']=='admin' %}
 <center>
-    <form action="{{ url_for('admin_query') }}" method="POST">
-        <h1>All Customers</h1>
-        <table class="table table-hover">
-            <tr>
-                <th scope="col">Name</th>
-                <th scope="col">Ticket No</th>
-                <th scope="col">Query</th>
-                <th scope="col">Query Status</th>
-                <th scope="col">Assigned to</th>
-                <th scope="col">Assign To</th>
-            </tr>
+    <div class="container">
+        <form action="{{ url_for('admin_query') }}" method="POST">
+            <h1>All Customers</h1>
+            <table class="table table-hover">
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Ticket No</th>
+                    <th scope="col">Query</th>
+                    <th scope="col">Query Status</th>
+                    <th scope="col">Assigned to</th>
+                    <th scope="col">Assign To</th>
+                </tr>
 
-            {% for cus in session['customer'] %}
-            {% if cus['QUERY'] != 'none' and cus['REVIEW_STATUS'] !=1 %}
+                {% for cus in session['customer'] %}
+                {% if cus['QUERY'] != 'none' and cus['REVIEW_STATUS'] !=1 %}
 
-            <tr>
+                <tr>
 
-                <td>
-                    <select name="cus_name">
-                        <option value="{{ cus['USERNAME'] }}">{{ cus['USERNAME'] }}</option>
-                    </select>
-                </td>
-                <td>
-                    {{ cus['TICKET'] }}
-                </td>
-                <td>
-                    {{ cus['QUERY'] }}
-                </td>
-                <td>
-                    {% if cus['REVIEW_STATUS'] == 1 %}
-                    Reviewed
-                    {% else %}
-                    Not yet Reviewed
-                    {% endif %}
-                </td>
-                <td>{{ cus['ASSIGNED_AGENT'] }}</td>
-                <td>
-                    <select name="agent_name">
-                        <option value="none">Select agent</option>
-                        {% for agt in session['agent'] %}
-                        <option value="{{ agt['USERNAME'] }}">{{ agt['USERNAME'] }}</option>
-                        {% endfor %}
+                    <td>
+                        <select name="cus_name">
+                            <option value="{{ cus['USERNAME'] }}">{{ cus['USERNAME'] }}</option>
+                        </select>
+                    </td>
+                    <td>
+                        {{ cus['TICKET'] }}
+                    </td>
+                    <td>
+                        {{ cus['QUERY'] }}
+                    </td>
+                    <td>
+                        {% if cus['REVIEW_STATUS'] == 1 %}
+                        Reviewed
+                        {% else %}
+                        Not yet Reviewed
+                        {% endif %}
+                    </td>
+                    <td>{{ cus['ASSIGNED_AGENT'] }}</td>
+                    <td>
+                        <select name="agent_name">
+                            <option value="none">Select agent</option>
+                            {% for agt in session['agent'] %}
+                            <option value="{{ agt['USERNAME'] }}">{{ agt['USERNAME'] }}</option>
+                            {% endfor %}
 
-                    </select>
-                </td>
-            </tr>
-            {% endif %}
-            {% endfor %}
-            <tr>
-                <td colspan="4">
-                    <center><input type="submit" value="submit"></center>
-                </td>
+                        </select>
+                    </td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+                <tr>
+                    <td colspan="4">
+                        <center><input type="submit" value="submit"></center>
+                    </td>
 
-            </tr>
+                </tr>
 
-        </table>
-    </form>
+            </table>
+        </form>
+    </div>
 
 
     <h1>Agent</h1>

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{%block title%}
+Registration page
+{%endblock%}
+
+{%block content%}
+<div class="container pd-20">
+    <h1 style="margin-top:100px;">
+        Welcome to Registration page
+    </h1>
+    <h2>{{ msg }}</h2>
+    <form name="register" action="{{url_for('register')}}" method="POST" onsubmit="submitted()">
+        <div class="form-group">
+            <label class="col-md-5">User Name</label><input class="form-control col-md-5" name="name" type="text"
+                required>
+            <label class="col-md-5">Email</label><input class="form-control col-md-5" name="email" type="text" required>
+            <label class="col-md-5">New Password:</label><input class="form-control col-md-5" id="p1" name="password1"
+                type="password" required>
+            <label class="col-md-5">confirm Password:</label><input class="form-control col-md-5" id="p2"
+                name="password" type="password" required>
+            <input name="submit" class="btn btn-success" type="submit" value="submit">
+            <input class="btn btn-danger" type="reset" value="clear">
+        </div>
+        <div>
+            <a class="btn btn-primary" href="{{ url_for('login') }}">Login instead?</a>
+        </div>
+    </form>
+</div>
+{%endblock%}
