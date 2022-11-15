@@ -1,8 +1,9 @@
 #!/usr/bin/python3
+from flask import Flask
+from flask_mail import Mail, Message
 import random
 import string
 from flask import Flask, render_template, request, redirect, url_for, session
-
 import ibm_db
 
 
@@ -12,9 +13,16 @@ def Upper_Lower_string(length):
     return result
 
 
-conn = ibm_db.connect("DATABASE=bludb;HOSTNAME=125f9f61-9715-46f9-9399-c8177b21803b.c1ogj3sd0tgtu0lqde00.databases.appdomain.cloud;PORT=30426;SECURITY=SSL;SSLServerCertificate=DigiCertGlobalRootCA.crt;UID=wvn94274;PWD=2K5Z7ZiQuEV2edmQ", '', '')
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'helloworld'
+conn = ibm_db.connect("DATABASE=bludb;HOSTNAME=125f9f61-9715-46f9-9399-c8177b21803b.c1ogj3sd0tgtu0lqde00.databases.appdomain.cloud;PORT=30426;SECURITY=SSL;SSLServerCertificate=DigiCertGlobalRootCA.crt;UID=wvn94274;PWD=2K5Z7ZiQuEV2edmQ", '', '')
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = 'shagish.111937@sxcce.edu.in'
+app.config['MAIL_PASSWORD'] = 'SX@09/07/2002'
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+mail = Mail(app)
 
 
 @app.route('/')
@@ -138,7 +146,7 @@ def success():
         out = ibm_db.prepare(conn, sql)
         ibm_db.bind_param(out, 1, query)
         ibm_db.bind_param(out, 2, session['ticket'])
-        ibm_db.bind_param(out, 3, session['name'])
+        ibm_db.bind_param(out, 3, session['customer']['USERNAME'])
         status = ibm_db.execute(out)
         if status:
             msg = 'Success ! Your Ticket Nno is :', ticket, 'You can now return to the home page'
@@ -158,16 +166,26 @@ def admin_query():
     msg = ""
     agent = request.form.getlist('agent_name')
     usr_name = request.form.getlist('cus_name')
+    emails = request.form.getlist('email')
     for i in range(0, len(agent)):
         if agent[i] != 'none':
-            qr = ibm_db.prepare(
-                conn, "UPDATE USER SET ASSIGNED_AGENT=? WHERE USERNAME=?")
-            ibm_db.bind_param(qr, 1, agent[i])
-            ibm_db.bind_param(qr, 2, usr_name[i])
-            result = ibm_db.execute(qr)
-            print(agent[i], "   ", usr_name[i])
-            if result:
-                msg = '<h1>queries executed</h1>'
+            try:
+                qr = ibm_db.prepare(
+                    conn, "UPDATE USER SET ASSIGNED_AGENT=? WHERE USERNAME=?")
+                ibm_db.bind_param(qr, 1, agent[i])
+                ibm_db.bind_param(qr, 2, usr_name[i])
+                result = ibm_db.execute(qr)
+                print(agent[i], usr_name[i], emails[i])
+                msg = Message(
+                    f'Hello {usr_name[i]}',
+                    sender='shagish.111937@sxcce.edu.in',
+                    recipients=[f'{emails[i]}']
+                )
+                msg.body = f'Agent named {agent[i]} alloted to your query.{agent[i]} will be responding you soon within 24 hrs.'
+                mail.send(msg)
+                msg = 'Allotments updated Successfully'
+            except:
+                msg = "Error saving allotments/sending emails"
     return render_template('done.html', msg=msg)
 
 
@@ -186,8 +204,8 @@ def agent_submit_reply():
                 ibm_db.bind_param(query, 2, names[i])
                 ibm_db.execute(query)
             except:
-                print('an error occured')
-    return '<html><body>done</body></html>'
+                msg = 'Error Sending replies'
+    return render_template('done.html', msg=msg)
 
 
 if __name__ == '__main__':

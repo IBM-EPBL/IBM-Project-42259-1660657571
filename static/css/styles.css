@@ -2,3 +2,7 @@
     text-align: center;
     display: inline-block;
 }
+
+body{
+    background-image: url('./bg.jpg');
+}

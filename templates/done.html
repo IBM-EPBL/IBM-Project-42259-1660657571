@@ -1,0 +1,17 @@
+{% extends 'base.html'%}
+{% block title %}
+Done
+{%endblock%}
+{%block content%}
+{% if session['role'] == 'agent' %}
+<center>
+    <h1>{{msg}}</h1>
+</center>
+{% endif %}
+{% if session['role'] == 'admin' %}
+<center>
+    <h1>{{msg}}</h1>
+</center>
+{% endif %}
+
+{% endblock %}

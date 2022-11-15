@@ -16,7 +16,7 @@
     <script src="{{ url_for('static',filename='js/script.js') }}"></script>
 </head>
 
-<body>
+<body style="background-image: url('bg.jpg');">
     <nav class="navbar navbar-primary">
         <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
@@ -30,11 +30,11 @@
                 </button>
                 <a class="navbar-brand" href="/">Customer Care Registry</a>
             </div>
-            
+
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="{{url_for('login')}}">Login</a></li>
                 <li><a href="{{url_for('register')}}">Register</a></li>
-                
+
             </ul>
         </div>
 

@@ -51,9 +51,8 @@ Dashboard
                 <th scope="col">Query</th>
                 <th scope="col">Reply</th>
             </tr>
-
             {% for cus in session['customer'] %}
-            {% if cus['ASSIGNED_AGENT'] == session['name'] and cus['QUERY']!='None'%}
+            {% if cus['ASSIGNED_AGENT'] == session['name'] and cus['REPLY']!='none' and cus['REVIEW_STATUS'] != 1 %}
 
             <tr>
 
@@ -95,6 +94,7 @@ Dashboard
                 <tr>
                     <th scope="col">Name</th>
                     <th scope="col">Ticket No</th>
+                    <th scope="col">Email</th>
                     <th scope="col">Query</th>
                     <th scope="col">Query Status</th>
                     <th scope="col">Assigned to</th>
@@ -102,7 +102,7 @@ Dashboard
                 </tr>
 
                 {% for cus in session['customer'] %}
-                {% if cus['QUERY'] != 'none' and cus['REVIEW_STATUS'] !=1 %}
+                {% if cus['QUERY'] != 'none' and cus['REVIEW_STATUS'] != 1 %}
 
                 <tr>
 
@@ -114,6 +114,12 @@ Dashboard
                     <td>
                         {{ cus['TICKET'] }}
                     </td>
+                    <td>
+                        <select name="email">
+                            <option value="{{ cus['EMAIL'] }}">{{ cus['EMAIL'] }}</option>
+                        </select>
+                    </td>
+
                     <td>
                         {{ cus['QUERY'] }}
                     </td>
