@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-from flask import Flask
 from flask_mail import Mail, Message
 import random
 import string
