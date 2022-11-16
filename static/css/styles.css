@@ -4,5 +4,6 @@
 }
 
 body{
-    background-image: url('./bg.jpg');
+    /* background-image: url('{{ url_for(\'static\', filename=\'img/bg.jpg\')}}'); */
+    background-size: cover;
 }

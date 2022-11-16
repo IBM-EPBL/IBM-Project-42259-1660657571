@@ -142,7 +142,7 @@ def success():
         ticket = session['ticket'] = Upper_Lower_string(16)
         print(ticket, session['ticket'])
         query = request.form['query']
-        sql = "UPDATE user SET QUERY=?,TICKET=? WHERE USERNAME=?"
+        sql = "UPDATE user SET QUERY=?,TICKET=?,REVIEW_STATUS=0 WHERE USERNAME=?"
         out = ibm_db.prepare(conn, sql)
         ibm_db.bind_param(out, 1, query)
         ibm_db.bind_param(out, 2, session['ticket'])
@@ -203,6 +203,8 @@ def agent_submit_reply():
                 ibm_db.bind_param(query, 1, text[i])
                 ibm_db.bind_param(query, 2, names[i])
                 ibm_db.execute(query)
+
+                msg='Replies sent successfully'
             except:
                 msg = 'Error Sending replies'
     return render_template('done.html', msg=msg)

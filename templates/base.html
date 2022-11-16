@@ -16,7 +16,7 @@
     <script src="{{ url_for('static',filename='js/script.js') }}"></script>
 </head>
 
-<body style="background-image: url('bg.jpg');">
+<body style="background-image: url({{ url_for('static', filename='img/bg.jpg') }})">
     <nav class="navbar navbar-primary">
         <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
