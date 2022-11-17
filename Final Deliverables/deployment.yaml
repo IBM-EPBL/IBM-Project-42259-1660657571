@@ -1,20 +1,20 @@
  apiVersion: apps/v1
  kind: Deployment
  metadata:
-   name: flasknode
+   name: customercareregistry
  spec:
    replicas: 3
    selector:
      matchLabels:
-       app: flasknode
+       app: customercareregistry
    template:
      metadata:
        labels:
-         app: flasknode
+         app: customercareregistry
      spec:
        containers:
-       - name: flasknode
-         image: icr.io/bergin/my-repo
+       - name: customercareregistry
+         image: icr.io/bergin/customercareregistry:v1
          imagePullPolicy: Always
          ports:
-         - containerPort: 9000
+         - containerPort: 5000
