@@ -52,7 +52,7 @@ Dashboard
                 <th scope="col">Reply</th>
             </tr>
             {% for cus in session['customer'] %}
-            {% if cus['ASSIGNED_AGENT'] == session['name'] and cus['REPLY']!='none' and cus['REVIEW_STATUS'] != 1 %}
+            {% if cus['ASSIGNED_AGENT'] == session['name'] and cus['REPLY'] == 'none' and cus['REVIEW_STATUS'] != 1 %}
 
             <tr>
 
@@ -102,7 +102,7 @@ Dashboard
                 </tr>
 
                 {% for cus in session['customer'] %}
-                {% if cus['QUERY'] != 'none' and cus['REVIEW_STATUS'] != 1 %}
+                {% if cus['REVIEW_STATUS'] == 0 and not cus['QUERY'] == 'none' %}
 
                 <tr>
 
@@ -153,15 +153,11 @@ Dashboard
             </table>
         </form>
     </div>
-
-
+</center>
+<center>
     <h1>Available Agents</h1>
 
     <table>
-        <tr>
-            <th>Name</th>
-        </tr>
-
         {% for agt in agent %}
         <tr>
             <td>

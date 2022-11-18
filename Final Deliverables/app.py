@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 from flask_mail import Mail, Message
 import random
 import string
@@ -203,11 +202,11 @@ def agent_submit_reply():
                 ibm_db.bind_param(query, 2, names[i])
                 ibm_db.execute(query)
 
-                msg='Replies sent successfully'
+                msg = 'Replies sent successfully'
             except:
                 msg = 'Error Sending replies'
     return render_template('done.html', msg=msg)
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0")
