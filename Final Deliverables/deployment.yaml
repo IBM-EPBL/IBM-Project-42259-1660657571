@@ -14,7 +14,7 @@
      spec:
        containers:
        - name: customercareregistry
-         image: icr.io/bergin/customercareregistry:v1
+         image: icr.io/bergin/customercareregistry:v2
          imagePullPolicy: Always
          ports:
          - containerPort: 5000
