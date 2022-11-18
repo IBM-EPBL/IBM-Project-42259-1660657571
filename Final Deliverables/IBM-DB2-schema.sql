@@ -29,7 +29,7 @@ PASSWORD VARCHAR(16)
 --inserting to agent table
 
 INSERT 
- INTO  "HGH01434"."AGENT" ("USERNAME","ASSIGNED_CUSTOMERS","PASSWORD")
+ INTO  "WVN94274"."AGENT" ("USERNAME","ASSIGNED_CUSTOMERS","PASSWORD")
  VALUES(
 'agent',               	--USERNAME  VARCHAR(32)  
 NULL,               	--ASSIGNED_CUSTOMERS  VARCHAR(3000)  
@@ -39,7 +39,7 @@ NULL,               	--ASSIGNED_CUSTOMERS  VARCHAR(3000)
 --inserting to admin table
 
 INSERT
-  INTO  "HGH01434"."ADMIN" ("USERNAME","PASSWORD")
+  INTO  "WVN94274"."ADMIN" ("USERNAME","PASSWORD")
   VALUES(
 'admin',               	--USERNAME  VARCHAR(32)  
 'admin'                	--PASSWORD  VARCHAR(16)  

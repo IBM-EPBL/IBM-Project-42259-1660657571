@@ -1,3 +1,5 @@
+#!/bin/python3
+
 from flask_mail import Mail, Message
 import random
 import string
@@ -6,8 +8,7 @@ import ibm_db
 
 
 def Upper_Lower_string(length):
-    result = ''.join((random.choice(string.ascii_uppercase)
-                     for x in range(length)))
+    result = ''.join((random.choice(string.ascii_uppercase) for x in range(length)))
     return result
 
 
